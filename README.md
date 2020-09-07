@@ -6,4 +6,4 @@ Whenever editing a file's source, please try to update the .8xp version of the c
 
 Known issues:
 #1 TI-BASIC crashes when falling off of the screen, as well as when placing a block offscreen
-#2 AXE sometimes draws columns with a delta height higher than 2 compared to the previous column
+#2 AXE is really messed up
