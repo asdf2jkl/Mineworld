@@ -2,20 +2,21 @@
 DiagnosticOff
 
 ClrDraw
-rand^95→{L₁}
-
+rand^48→{L₁}
 For(U,0,94)
-rand^5→{1+L₁)
-{1+L₁}-2→{1+L₁}
+
+If (rand^14)=1
+rand^8→{1+L₁}
+Else:rand^3→{1+L₁}:End
 {L₁}+{1+L₁}→{1+L₁}
 If {1+L₁}<0
 1→{1+L₁}:End
 If {1+L₁}>62
 62→{1+L₁}:End
-{1+L₁}→A
+
 For(A,{1+L₁},62)
 Pxl-On(U,A)
 End:End
 
 DispGraph
-Pause 3500
+Pause 3000
