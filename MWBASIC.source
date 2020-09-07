@@ -2,7 +2,7 @@
 "0018245A5A5A2418
 Lbl 0
 0→Z
-Menu("MINEWORLD","Random world",RW,"Seed",SD,"Loop",LP,"Player",PL,"Save",SV,"Lode",LD,"End",EN
+Menu("MINEWORLD","Random world",RW,"Seed",SD,"Loop",LP,"Player",PL,"Save",SV,"Load",LD,"End",EN
 Lbl RW
 randInt(­99,99→θ
 Goto 1
