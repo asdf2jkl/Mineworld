@@ -14,8 +14,8 @@ If {1+L₁}>62
 62→{1+L₁}:End
 {1+L₁}→A
 For(A,{1+L₁},62)
-Pxl-On(U,{1+L₁})
+Pxl-On(U,A)
 End:End
 
 DispGraph
-Pause 2000
+Pause 3500
