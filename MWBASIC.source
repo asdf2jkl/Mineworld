@@ -1,0 +1,190 @@
+Lbl 0
+0→Z
+Menu("MINEWORLD","Random world",RW,"Seed",SD,"Loop",LP,"Player",PL,"Save",SV,"Load",LD,"End",EN
+Lbl RW
+randInt(­99,99→θ
+Goto 1
+Lbl SD
+Input "Seed ",θ
+Goto 1
+Lbl LP
+1→Z
+Goto SD
+Lbl 1
+AxesOff
+ClrDraw
+θ→rand
+randInt(0,94→A
+For(U,0,94
+"TERA
+2→Q
+If randInt(1,25)=1
+7→Q
+randInt(­Q,Q→B
+B+A→A
+If A<0
+1→A
+If A>62
+62→A
+"HOSE
+­3→J
+If randInt(1,100)=1:Then
+For(J,­3,4
+For(I,­4,7
+If A+I>­1 and A+I<63 and U+J<95 and U+J>­1
+Pxl-On(A+I,U+J
+End:End
+If A-2>­1:Then
+Pxl-Off(A-2,U
+If U+2<95
+Pxl-Off(A-2,U+2:If U-2>­1
+Pxl-Off(A-2,U-2:End
+If A-1>­1
+Pxl-Off(A-1,U
+End
+"TRE
+If randInt(1,10)=1:Then
+If A-7>­1:Then
+If U-1>0
+Pxl-On(A-7,U-1
+If U+1<95
+Pxl-On(A-7,U+1
+End
+If A-6>­1:Then
+If U-2>­1
+Pxl-On(A-6,U-2
+If U-1>­1
+Pxl-On(A-6,U-1
+If U+1<95
+Pxl-On(A-6,U+1
+If U+2<95
+Pxl-On(A-6,U+2
+End
+If A-5>­1:Then
+If U-1>­1
+Pxl-On(A-5,U-1
+If U+1<95
+Pxl-On(A-5,U+1
+End
+For(I,­7,­1
+If A+I>­1
+Pxl-On(A+I,U
+End:End
+"EATH
+For(A,A,62
+Pxl-On(A,U
+End:End
+If Z=1:Then
+θ+1→θ
+Goto 1
+End
+Goto 5
+Lbl LD
+Input "Lode ",A
+ClrDraw
+If A=0
+RecallPic 0
+If A=1
+RecallPic 1
+If A=2
+RecallPic 2
+If A=3
+RecallPic 3
+If A=4
+RecallPic 4
+If A=5
+RecallPic 5
+If A=6
+RecallPic 6
+If A=7
+RecallPic 7
+If A=8
+RecallPic 8
+If A=9
+RecallPic 9
+Lbl PL
+Lbl 5
+30→X:10→Y:0→K
+Pxl-On(Y,X
+While K≠1
+getKey→K
+"prgmθ
+pxl-Test(Y+1,X)→A
+If not(A
+1→T
+If K=24
+­1→S
+If K=26
+1→S
+If K=53
+­1→T
+If A:Then
+If K=25
+­5→T
+If K=54:Then
+1→S:­1→T
+End
+If K=52:Then
+­1→S:­1→T
+End
+If K=64:Then
+1→S:1→T
+End
+If K=62:Then
+­1→S:1→T
+End
+End
+If X+S≥0 and X+S≤94 and Y+T≥0:Then
+If not(pxl-Test(Y+T,X+S:Then
+Pxl-Off(Y,X
+Y+T→Y:X+S→X
+Pxl-On(Y,X
+End:End
+0→T:0→S
+
+"MINE
+If K=72
+Pxl-Change(Y-1,X-1
+If K=73
+Pxl-Change(Y-1,X
+If K=74
+Pxl-Change(Y-1,X+1
+If K=82
+Pxl-Change(Y,X-1
+If K=84
+Pxl-Change(Y,X+1
+If K=92
+Pxl-Change(Y+1,X-1
+If K=93
+Pxl-Change(Y+1,X
+If K=94
+Pxl-Change(Y+1,X+1
+If K=45:Then
+Pxl-Off(Y,X
+Goto 0
+End
+End
+Lbl SV
+Input "Save ",A:If A=0
+StorePic 0
+If A=1
+StorePic 1
+If A=2
+StorePic 2
+If A=3
+StorePic 3
+If A=4
+StorePic 4
+If A=5
+StorePic 5
+If A=6
+StorePic 6
+If A=7
+StorePic 7
+If A=8
+StorePic 8
+If A=9
+StorePic 9
+Lbl EN
+Disp "Thank you for
+Disp "playing my game
