@@ -5,5 +5,5 @@ TI-BASIC files are perfectly functional, but the axe code is in a pre-alpha stat
 Whenever editing a file's source, please try to update the .8xp version of the code in order to keep the files up to date.
 
 Known issues:
-#1 TI-BASIC crashes when falling off of the screen, as well as when placing a block offscreen
+#1 TI-BASIC crashes when placing a block offscreen
 #2 AXE is really messed up
