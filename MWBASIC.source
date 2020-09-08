@@ -81,7 +81,7 @@ If Z=1:Then
 θ+1→θ
 Goto 1
 End
-Goto 5
+Goto PL
 Lbl LD
 Input "Lode ",A
 ClrDraw
@@ -106,13 +106,14 @@ RecallPic 8
 If A=9
 RecallPic 9
 Lbl PL
-Lbl 5
 30→X:10→Y:0→K
 Pxl-On(Y,X
 While K≠1
 getKey→K
 "prgmθ
+If Y≠62:Then
 pxl-Test(Y+1,X)→A
+Else:Return:End
 If not(A
 1→T
 If K=24
