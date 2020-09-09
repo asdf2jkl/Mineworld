@@ -3,7 +3,7 @@ DiagnosticOff
 [A0E0A0E0A0E0A0E0]→Pic1T
 ClrDraw
 rand^48→{L₁}
-For(U,0,94)
+For(U,0,96)
 
 If (rand^14)=1
 rand^8→{1+L₁}
@@ -15,14 +15,10 @@ If {1+L₁}>62
 62→{1+L₁}:End
 
 .tower
-if(rand^30)=1
-Pt-On(U-1,{1+L1}-5,Pic1T)
-End
+If (rand^30)=1
+Pt-On(U-1,{1+L1}-5,Pic1T):End
 
-.this fixes terrain so it flows
-{1+L1}→{L1}
-
-For(A,{1+L₁},62)
+For(A,{1+L₁},64)
 Pxl-On(U,A)
 End:End
 
