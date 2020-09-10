@@ -1,22 +1,30 @@
 .MWAXE
 DiagnosticOff
+[A0E0A0E0A0E0A0E0]→Pic1T
 
 ClrDraw
-rand^48→{L₁}
-For(U,0,94)
+rand^96+1→{L₁}
+For(U,0,96)
 
-If (rand^14)=1
-rand^8→{1+L₁}
-Else:rand^3→{1+L₁}:End
+If (rand^25+1)=1
+rand^7+1→{1+L₁}
+Else:rand^5-2→{1+L₁}:End
 {L₁}+{1+L₁}→{1+L₁}
 If {1+L₁}<0
 1→{1+L₁}:End
-If {1+L₁}>62
-62→{1+L₁}:End
+If {1+L₁}>63
+63→{1+L₁}:End
 
-For(A,{1+L₁},62)
+.tower
+If (rand^60+1)=1
+Pt-On(U-1,{1+L₁}-5,Pic1T):End
+
+{1+L₁}→{L₁}
+
+For(A,{1+L₁},64)
 Pxl-On(U,A)
 End:End
 
 DispGraph
+
 Pause 3000
