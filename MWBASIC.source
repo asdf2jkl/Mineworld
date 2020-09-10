@@ -147,21 +147,21 @@ End:End
 0→T:0→S
 
 "MINE
-If K=72
+If K=72 and Y>0 and X>0
 Pxl-Change(Y-1,X-1
-If K=73
+If K=73 and Y>0
 Pxl-Change(Y-1,X
-If K=74
+If K=74 and Y>0 and X<94
 Pxl-Change(Y-1,X+1
-If K=82
+If K=82 and X>0
 Pxl-Change(Y,X-1
-If K=84
+If K=84 and X<94
 Pxl-Change(Y,X+1
-If K=92
+If K=92 and Y<62 and X>0
 Pxl-Change(Y+1,X-1
-If K=93
+If K=93 and Y<62
 Pxl-Change(Y+1,X
-If K=94
+If K=94 and Y<62 and X<94
 Pxl-Change(Y+1,X+1
 If K=45:Then
 Pxl-Off(Y,X
