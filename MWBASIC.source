@@ -113,7 +113,7 @@ getKey→K
 "prgmθ
 If Y≠62:Then
 pxl-Test(Y+1,X)→A
-Else:Return:End
+Else:Goto EN:End
 If not(A
 1→T
 If K=24
@@ -190,5 +190,6 @@ StorePic 8
 If A=9
 StorePic 9
 Lbl EN
+ClrHome
 Disp "Thank you for
 Disp "playing my game
