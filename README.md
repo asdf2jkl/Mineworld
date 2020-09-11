@@ -20,6 +20,6 @@ Things being worked on:
 
 #6 AXE needs to be able to scroll left
 
-#8 AXE needs a save/load feature
+#7 AXE needs a save/load feature
 
-#9 Possible port to html, 84+ ce, or Nspire
+#8 Possible port to html, 84+ ce, or Nspire
