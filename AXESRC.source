@@ -1,9 +1,11 @@
 .MWAXE
+1→{5+L₁}
+Full→{5+L₁}
 DiagnosticOff
 [A0E0A0E0A0E0A0E0]→Pic1TOWR
 [FFFFABEFFFFFFFFF]→Pic1HOSE
 [0E1F0E0404040000]→Pic1TREE
-0→{8+L₁}
+0→{6+L₁}→{7+L₁}→{8+L₁}
 
 Lbl START
 rand^96+1→{L₁}
@@ -46,7 +48,6 @@ If {8+L₁}=0
 Pxl-On({2+L₁},{3+L₁})
 
 0→{8+L₁}
-0→{4+L₁}
 While {4+L₁}≠15
 0→{4+L₁}
 getKey→{4+L₁}
@@ -76,10 +77,10 @@ DispGraph
 End
 0→{6+L₁}
 0→{7+L₁}
-If {2+L₁}=96
-2→{8+L₁}:Goto REGEN:End
-Pause 300
-End
+If {5+L₁}=0:Pause 300
+Else:Pause 750
+End:End
 
 Lbl EN
+Normal
 ClrHome
