@@ -77,6 +77,8 @@ DispGraph
 End
 0→{6+L₁}
 0→{7+L₁}
+If {2+L₁}=96
+2→{8+L₁}:Goto REGEN:End
 If {5+L₁}=0:Pause 300
 Else:Pause 750
 End:End
