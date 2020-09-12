@@ -47,14 +47,14 @@ Lbl CHAR
 If {8+L₁}=0
 30→{2+L₁}:10→{3+L₁}
 ElseIf {8+L₁}=1:
-RecallPic :95→{2+L₁}:{10+L₁}→{L₁}:0→{9+L₁}
+RecallPic :95→{2+L₁}:{12+L₁}→{L₁}:0→{9+L₁}
 Else:0→{2+L₁}:End
 Pxl-On({2+L₁},{3+L₁})
 DispGraph
 
 0→{8+L₁}
 While {4+L₁}≠15
-0→{4+L₁}
+0→{4+L₁}→{10+L₁}→{11+L₁}
 getKey→{4+L₁}
 If pxl-Test({2+L₁},{3+L₁}+1}=0
 {7+L₁}+1→{7+L₁}
@@ -73,19 +73,39 @@ If {4+L₁}=55
 Goto CHAR:End
 If {4+L₁}=9
 Goto START:End
+If {4+L₁}=28
+{11+L₁}-1→{11+L₁}:End
+If {4+L₁}=19
+{10+L₁}+1→{10+L₁}:End
+If {4+L₁}=26
+{11+L₁}+1→{11+L₁}:End
+If {4+L₁}=35
+{10+L₁}-1→{10+L₁}:End
+If {4+L₁}=20
+{10+L₁}+1→{10+L₁}:{11+L₁}-1→{11+L₁}:End
+If {4+L₁}=18
+{10+L₁}+1→{10+L₁}:{11+L₁}+1→{11+L₁}:End
+If {4+L₁}=34
+{10+L₁}-1→{10+L₁}:{11+L₁}+1→{11+L₁}:End
+If {4+L₁}=36
+{10+L₁}-1→{10+L₁}:{11+L₁}-1→{11+L₁}:End
 
 If pxl-Test({2+L₁}+{6+L₁},{3+L₁}+{7+L₁})=0
 {2+L₁}+{6+L₁}→{2+L₁}
 {3+L₁}+{7+L₁}→{3+L₁}
 Pxl-On({2+L₁},{3+L₁})
-DispGraph
-End
+DispGraph:End
+If {10+L₁}≠0 or {11+L₁}≠0
+{2+L₁}+{10+L₁}→{10+L₁}
+{3+L₁}+{11+L₁}→{11+L₁}
+Pxl-Change({10+L₁},{11+L₁}
+DispGraph:End
 0→{6+L₁}
 0→{7+L₁}
 If {2+L₁}=255
 1→{8+L₁}:Goto CHAR:End
 If {2+L₁}=96
-2→{8+L₁}:StorePic :1→{9+L₁}:{L₁}→{10+L₁}:Goto REGEN
+2→{8+L₁}:StorePic :1→{9+L₁}:{L₁}→{12+L₁}:Goto REGEN
 End
 If {5+L₁}=0:Pause 300
 Else:Pause 750
