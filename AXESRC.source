@@ -9,6 +9,7 @@ DiagnosticOff
 
 Lbl START
 rand^96+1→{L₁}
+0→{9+L₁}
 Lbl REGEN
 ClrDraw
 For(U,0,96)
@@ -44,8 +45,12 @@ DispGraph
 
 Lbl CHAR
 If {8+L₁}=0
-30→{2+L₁}:10→{3+L₁}:Else:0→{2+L₁}:End
+30→{2+L₁}:10→{3+L₁}
+ElseIf {8+L₁}=1:
+RecallPic :95→{2+L₁}:{10+L₁}→{L₁}:0→{9+L₁}
+Else:0→{2+L₁}:End
 Pxl-On({2+L₁},{3+L₁})
+DispGraph
 
 0→{8+L₁}
 While {4+L₁}≠15
@@ -58,7 +63,7 @@ Goto EN:End
 
 Pxl-Off({2+L₁},{3+L₁})
 If {4+L₁}=2
-If {2+L₁}≠0
+If {2+L₁}≠0 or {9+L₁}=1
 {6+L₁}-1→{6+L₁}:End:End
 If {4+L₁}=3
 {6+L₁}+1→{6+L₁}:End
@@ -77,8 +82,11 @@ DispGraph
 End
 0→{6+L₁}
 0→{7+L₁}
+If {2+L₁}=255
+1→{8+L₁}:Goto CHAR:End
 If {2+L₁}=96
-2→{8+L₁}:Goto REGEN:End
+2→{8+L₁}:StorePic :1→{9+L₁}:{L₁}→{10+L₁}:Goto REGEN
+End
 If {5+L₁}=0:Pause 300
 Else:Pause 750
 End:End
