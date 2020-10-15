@@ -12,14 +12,8 @@ Known issues:
 
 Things being worked on:
 
-#3 AXE needs to have mining added
+#3 AXE needs to be able to scroll left
 
-#4 TI-Basic needs towers added
+#4 AXE needs a save/load feature
 
-#5 AXE needs proper seeds as similar to TI-BASIC as possible
-
-#6 AXE needs to be able to scroll left
-
-#7 AXE needs a save/load feature
-
-#8 Possible port to html, 84+ ce, or Nspire
+#5 Possible port to html/js or c/c++
