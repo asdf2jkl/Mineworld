@@ -145,7 +145,8 @@ While {4+L1}!=15
 		If {4+L1}=4
 			{7+L1}-5->{7+L1}
 	End:End
-	If {4+L1}=55 .mode
+	.mode
+	If {4+L1}=55
 		.this pause menu just jumps to the main menu system 
 		Lbl PAUSE
 		Menu("PAUSE","Continue","New World","Options","Exit")->{13+L1}
