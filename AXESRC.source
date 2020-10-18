@@ -1,41 +1,61 @@
-.MWAXE
+.MWAXE Mineworld in axe
 #Axiom(MENUS)
 #ExprOn
+#Icon(000003C003C00C300C3033CC324C324C324C324C33CC0C300C3003C003C00000)
+.I recommend using the IDE found here: https://www.cemetech.net/sc/
 
+...Variables in the format of {x+L1} (0 is equivalent to just {L1})
+0=last column height, 1=column height modifier/current column height
+2=X coord of character, 3=Y coord of char
+4=last key pressed, 5=6/15 mhz toggle
+6=char x modifier, 7=char y modifier
+8=toggles saved scene in rear buffer, 9=It's used in a few places, but I'm not actually sure what it does, just don't mess with it
+10=x modifier for mining, 11=y modifier for mining
+12=saves last column height when going left, 13=menu choice
+14=toggle structures (0 is on), 15=goto after menu is called (0=MENU, 1=PAUSE)
+...
+
+
+.using 15mhz mode on 84+ calculators without slowing down the game for 6mhz calculators
 1->{5+L1}
 Full->{5+L1}
 DiagnosticOff
+
+.initilizing variables and pointers
 [A0E0A0E0A0E0A0E0]->Pic1TOWR
 [FFFFABEFFFFFFFFF]->Pic1HOSE
 [0E1F0E0404040000]->Pic1TREE
-
 0->{4+L1}->{6+L1}->{7+L1}->{8+L1}->{14+L1}->{15+L1}
 
+.This section is the entire menu system, the pause menu just jumps up here
 Lbl MENU
 Menu("MINEWORLD:","New World","Options","End")->{13+L1}
 If {13+L1}=2
 	Lbl OPT
 	Menu("OPTIONS:","Strutures","Back")->{13+L1}
 	If {13+L1}=2
-		If {15+L1}=0
-		Goto MENU:End
-		Goto PAUSE
+		Goto RTP
 	End
 	If {13+L1}=1
 		Menu("STRUCTURES","On (default)","Off")->{13+L1}
 		If {13+L1}=1
-		0->{14+L1}:End
+			0->{14+L1}
+		End
 		If {13+L1}=2
-		1->{14+L1}:End
+			1->{14+L1}
+		End
 		Lbl RTP
 		If {15+L1}=0
-		Goto MENU:End
+			Goto MENU
+		End
 		Goto PAUSE
 End:End
 If {13+L1}=3
-	Goto EN
+	Goto END
 End
 
+.world generator works from right to left on the screen,
+.finding the height of a world, then drawing pixels down
 Lbl START
 rand^34+30->{L1}
 0->{9+L1}
@@ -43,111 +63,170 @@ Lbl REGEN
 ClrDraw
 For(U,0,95)
 	
-	rand^5-2->{1+L1}:{L1}+{1+L1}->{1+L1}
-	If sign{1+L1}>>63
-	63->{1+L1}:End
-	If sign{1+L1}<<0
-	0->{1+L1}:End
+	.generates a random number from -2 to 2
+	rand^5-2->{1+L1}
+	.finds the difference between the last column and the random number
+	{L1}+{1+L1}->{1+L1}
 	
+	.hack to ensure that massive cliffs do not occur due to an overflow error
+	.this is the only time signed mathematics is used
+	If sign{1+L1}>>63
+		63->{1+L1}
+	End
+	If sign{1+L1}<<0
+		0->{1+L1}
+	End
+	
+	.this is the sprite generation segment
+	.the structures menu can cause this segment to be skipped
+	.the sprites are not placed quite right, I just don't want to fix it
 	If {14+L1}=0
 		.tower
 		If (rand^90+1)=1
-		Pt-On(U-1,{1+L1}-5,Pic1TOWR):End
+			Pt-On(U-1,{1+L1}-5,Pic1TOWR)
+		End
 		
 		.house
 		If rand^90+1=1
-		Pt-Off(U-4,{1+L1}-4,Pic1HOSE):End
+			Pt-Off(U-4,{1+L1}-4,Pic1HOSE)
+		End
 		
 		.tree
 		If rand^30+1=1
-		Pt-On(U-5,{1+L1}-6,Pic1TREE):End
+			Pt-On(U-5,{1+L1}-6,Pic1TREE)
+		End
 	End
 	
 	{1+L1}->{L1}
 	
+	.this fills in the rest of the pixels, it's (very) inefficient, but I'm lazy
 	For(A,{1+L1},64)
 		Pxl-On(U,A)
 End:End
 DispGraph
 
+.CHAR sets the characters inital position, as well as resuming the saved copy from the rear buffer when applicable
 Lbl CHAR
 If {8+L1}=0
-	30->{2+L1}:10->{3+L1}
-	ElseIf {8+L1}=1:
-	RecallPic:95->{2+L1}:{12+L1}->{L1}:0->{9+L1}
-Else:0->{2+L1}:End
+		30->{2+L1}
+		10->{3+L1}
+	ElseIf {8+L1}=1
+		RecallPic
+		95->{2+L1}
+		{12+L1}->{L1}
+		0->{9+L1}
+	Else
+		0->{2+L1}
+End
 Pxl-On({2+L1},{3+L1})
 DispGraph
 
 0->{8+L1}
+.ugly while loop handling frames
 While {4+L1}!=15
+	Pxl-Off({2+L1},{3+L1})
 	0->{4+L1}->{10+L1}->{11+L1}
 	getKey->{4+L1}
+	.dealing with falling
 	If pxl-Test({2+L1},{3+L1}+1}=0
 		{7+L1}+1->{7+L1}
 		If {3+L1}=63
 			{7+L1}-1->{7+L1}
 	End:End
-	Pxl-Off({2+L1},{3+L1})
 	If {4+L1}=2
 		If {2+L1}!=0 or {9+L1}=1
-	{6+L1}-1->{6+L1}:End:End
+			{6+L1}-1->{6+L1}
+	End:End
 	If {4+L1}=3
-	{6+L1}+1->{6+L1}:End
+		{6+L1}+1->{6+L1}
+	End
+	.weird hack needed to jump when on the bottom of the screen
 	If {3+L1}=63 or pxl-Test({2+L1},{3+L1}+1)=1
 		If {4+L1}=4
 			{7+L1}-5->{7+L1}
 	End:End
-	If {4+L1}=55
+	If {4+L1}=55 .mode
+		.this pause menu just jumps to the main menu system 
 		Lbl PAUSE
 		Menu("PAUSE","Continue","New World","Options","Exit")->{13+L1}
 		If {13+L1}=2
-		Goto START:End
+			Goto START
+		End
 		If {13+L1}=3
 			1->{15+L1}
-		Goto OPT:End
+			Goto OPT
+		End
 		If {13+L1}=4
-	Goto EN:End:End
+			Goto END
+	End:End
+	.resetting the characters position by hitting enter
 	If {4+L1}=9
-	Goto CHAR:End
+		Goto CHAR
+	End
+	.these are all mining commands
 	If {4+L1}=28
-	{11+L1}-1->{11+L1}:End
+		{11+L1}-1->{11+L1}
+	End
 	If {4+L1}=19
-	{10+L1}+1->{10+L1}:End
+		{10+L1}+1->{10+L1}
+	End
 	If {4+L1}=26
-	{11+L1}+1->{11+L1}:End
+		{11+L1}+1->{11+L1}
+	End
 	If {4+L1}=35
-	{10+L1}-1->{10+L1}:End
+		{10+L1}-1->{10+L1}
+	End
 	If {4+L1}=20
-	{10+L1}+1->{10+L1}:{11+L1}-1->{11+L1}:End
+		{10+L1}+1->{10+L1}
+		{11+L1}-1->{11+L1}
+	End
 	If {4+L1}=18
-	{10+L1}+1->{10+L1}:{11+L1}+1->{11+L1}:End
+		{10+L1}+1->{10+L1}
+		{11+L1}+1->{11+L1}
+	End
 	If {4+L1}=34
-	{10+L1}-1->{10+L1}:{11+L1}+1->{11+L1}:End
+		{10+L1}-1->{10+L1}
+		{11+L1}+1->{11+L1}
+	End
 	If {4+L1}=36
-	{10+L1}-1->{10+L1}:{11+L1}-1->{11+L1}:End
+		{10+L1}-1->{10+L1}
+		{11+L1}-1->{11+L1}
+	End
 	
+	.these two if statements are colision detection and drawing to the screen
 	If pxl-Test({2+L1}+{6+L1},{3+L1}+{7+L1})=0
 		{2+L1}+{6+L1}->{2+L1}
 		{3+L1}+{7+L1}->{3+L1}
 		Pxl-On({2+L1},{3+L1})
-	DispGraph:End
+		DispGraph
+	End
 	If {10+L1}!=0 or {11+L1}!=0
 		{2+L1}+{10+L1}->{10+L1}
 		{3+L1}+{11+L1}->{11+L1}
 		Pxl-Change({10+L1},{11+L1}
-	DispGraph:End
-	0->{6+L1}
-	0->{7+L1}
-	If {2+L1}=255
-	1->{8+L1}:Goto CHAR:End
-	If {2+L1}=96
-		2->{8+L1}:StorePic:1->{9+L1}:{L1}->{12+L1}:Goto REGEN
+		DispGraph
 	End
-	If {5+L1}=0:Pause 250
-		Else:Pause 675
+	0->{6+L1}->{7+L1}
+	.these two if statements are for handling moving off screen
+	If {2+L1}=255
+		1->{8+L1}
+		Goto CHAR
+	End
+	If {2+L1}=96
+		2->{8+L1}
+		StorePic
+		1->{9+L1}
+		{L1}->{12+L1}
+		Goto REGEN
+	End
+	
+	.pause for frame pacing (about 7.2 fps), the if is to keep 15mhz calcs the same speed 
+	If {5+L1}=0
+			Pause 250
+		Else
+			Pause 675
 End:End
 
-Lbl EN
+Lbl END
 Normal
 ClrHome
