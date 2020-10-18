@@ -9,7 +9,7 @@
 2=X coord of character, 3=Y coord of char
 4=last key pressed, 5=6/15 mhz toggle
 6=char x modifier, 7=char y modifier
-8=toggles saved scene in rear buffer, 9=It's used in a few places, but I'm not actually sure what it does, just don't mess with it
+8=toggles saved scene in rear buffer, 9=Something to do with restoring scene from rear buffer
 10=x modifier for mining, 11=y modifier for mining
 12=saves last column height when going left, 13=menu choice
 14=toggle structures (0 is on), 15=goto after menu is called (0=MENU, 1=PAUSE)
@@ -43,9 +43,9 @@ If {13+L1}=2
 		Goto RTP
 	End
 	If {13+L1}=2
-		.1=~5.15fps, 2=6fps, 3=7.2fps, 4=9fps, 5=12fps
-		Menu("SPEED:","1","2 (default)","3","4","5")->{13+L1}
-		1000-(150*{13+L1})->{16+L1}^^r
+		.1=4.5fps, 2=~5.15fps, 3=6fps, 4=7.2fps, 5=9fps
+		Menu("SPEED:","1","2","3 (default)","4","5")->{13+L1}
+		1150-(150*{13+L1})->{16+L1}^^r
 		If {5+L1}=0
 			{16+L1}^^r/2.5->{16+L1}^^r
 		End
