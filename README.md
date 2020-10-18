@@ -8,7 +8,7 @@ Compiling: You will need MENUS.8xv and the Axe parser on the calculator in order
 
 The Axe Parser can be found here: https://www.ticalc.org/archives/files/fileinfo/456/45659.html
 
-Things being worked on:
+Things being worked on (in no particular order):
 
 #1 AXE may get grayscale options
 
@@ -19,6 +19,8 @@ Things being worked on:
 #4 AXE needs a save/load feature
 
 #5 Possible port to html/js or c/c++
+
+#6 Should 2 or 3 be the default game speed, opinions are needed
 
 Credit to:
 

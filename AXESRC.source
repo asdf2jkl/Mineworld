@@ -13,6 +13,7 @@
 10=x modifier for mining, 11=y modifier for mining
 12=saves last column height when going left, 13=menu choice
 14=toggle structures (0 is on), 15=goto after menu is called (0=MENU, 1=PAUSE)
+16=two byte game speed, 17= second half of {16+L1} 
 ...
 
 
@@ -20,6 +21,11 @@
 1->{5+L1}
 Full->{5+L1}
 DiagnosticOff
+If {5+L1}=0
+	300->{16+L1}^^r
+Else
+	750->{16+L1}^^r
+End
 
 .initilizing variables and pointers
 [A0E0A0E0A0E0A0E0]->Pic1TOWR
@@ -32,8 +38,17 @@ Lbl MENU
 Menu("MINEWORLD:","New World","Options","End")->{13+L1}
 If {13+L1}=2
 	Lbl OPT
-	Menu("OPTIONS:","Strutures","Back")->{13+L1}
+	Menu("OPTIONS:","Strutures","Speed","Back")->{13+L1}
+	If {13+L1}=3
+		Goto RTP
+	End
 	If {13+L1}=2
+		.1=~5.15fps, 2=6fps, 3=7.2fps, 4=9fps, 5=12fps
+		Menu("SPEED:","1","2 (default)","3","4","5")->{13+L1}
+		1000-(150*{13+L1})->{16+L1}^^r
+		If {5+L1}=0
+			{16+L1}^^r/2.5->{16+L1}^^r
+		End
 		Goto RTP
 	End
 	If {13+L1}=1
@@ -63,9 +78,8 @@ Lbl REGEN
 ClrDraw
 For(U,0,95)
 	
-	.generates a random number from -2 to 2
+	.generates a random integer from -2 to 2
 	rand^5-2->{1+L1}
-	.finds the difference between the last column and the random number
 	{L1}+{1+L1}->{1+L1}
 	
 	.hack to ensure that massive cliffs do not occur due to an overflow error
@@ -108,15 +122,15 @@ DispGraph
 .CHAR sets the characters inital position, as well as resuming the saved copy from the rear buffer when applicable
 Lbl CHAR
 If {8+L1}=0
-		30->{2+L1}
-		10->{3+L1}
+	30->{2+L1}
+	10->{3+L1}
 	ElseIf {8+L1}=1
-		RecallPic
-		95->{2+L1}
-		{12+L1}->{L1}
-		0->{9+L1}
+	RecallPic
+	95->{2+L1}
+	{12+L1}->{L1}
+	0->{9+L1}
 	Else
-		0->{2+L1}
+	0->{2+L1}
 End
 Pxl-On({2+L1},{3+L1})
 DispGraph
@@ -221,12 +235,9 @@ While {4+L1}!=15
 		Goto REGEN
 	End
 	
-	.pause for frame pacing (about 7.2 fps), the if is to keep 15mhz calcs the same speed 
-	If {5+L1}=0
-			Pause 250
-		Else
-			Pause 675
-End:End
+	.pauses for frame pacing, 1800 is 1 second in normal mode, and 4500 is 1 second in full mode
+	Pause {16+L1}^^r
+End
 
 Lbl END
 Normal
