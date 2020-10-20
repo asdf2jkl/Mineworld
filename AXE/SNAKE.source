@@ -1,0 +1,41 @@
+..SNAKE v0.8
+.This program just plays a simple snake game, nothing really to it.
+StorePic
+ClrDraw
+0->{64+L1}
+0->{65+L1}
+~1->{69+L1}
+63->{67+L1}
+Pxl-On({2+L1},{67+L1})
+While {64+L1}=0
+	0->{68+L1}
+	getKey->{68+L1}
+	If {68+L1}=1
+		0->{65+L1}
+		1->{69+L1}
+	End
+	If {68+L1}=2
+		~1->{65+L1}
+		0->{69+L1}
+	End
+	If {68+L1}=3
+		1->{65+L1}
+		0->{69+L1}
+	End
+	If {68+L1}=4
+		0->{65+L1}
+		~1->{69+L1}
+	End
+	{2+L1}+sign{65+L1}->{2+L1}
+	{67+L1}+sign{69+L1}->{67+L1}
+	pxl-Test({2+L1},{67+L1})->{64+L1}
+	Pxl-On({2+L1},{67+L1})
+	DispGraph
+	If {67+L1}=64
+		Goto ED
+	End
+	Pause {16+L1}^^r
+End
+Lbl ED
+RecallPic
+0->{3+L1}
