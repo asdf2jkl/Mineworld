@@ -1,4 +1,4 @@
-.MWAXE Mineworld in axe
+.MWORLD Mineworld v0.8
 #Axiom(MENUS)
 #ExprOn
 #Icon(000003C003C00C300C3033CC324C324C324C324C33CC0C300C3003C003C00000)
@@ -13,7 +13,7 @@
 10=x modifier for mining, 11=y modifier for mining
 12=saves last column height when going left, 13=menu choice
 14=toggle structures (0 is on), 15=goto after menu is called (0=MENU, 1=PAUSE)
-16=two byte game speed, 17= second half of {16+L1} 
+16=two byte game speed, 17= second half of {16+L1}
 ...
 
 
@@ -137,6 +137,7 @@ DispGraph
 
 0->{8+L1}
 .ugly while loop handling frames
+Lbl LOOP
 While {4+L1}!=15
 	Pxl-Off({2+L1},{3+L1})
 	0->{4+L1}->{10+L1}->{11+L1}
@@ -233,6 +234,10 @@ While {4+L1}!=15
 		1->{9+L1}
 		{L1}->{12+L1}
 		Goto REGEN
+	End
+	If {3+L1}=250
+		prgmSNAKE
+		Goto LOOP
 	End
 	
 	.pauses for frame pacing, 1800 is 1 second in normal mode, and 4500 is 1 second in full mode
