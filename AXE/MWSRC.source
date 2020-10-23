@@ -1,247 +1,265 @@
-.MWORLD Mineworld v0.8
+.MWORLD Mineworld v0.9
 #Axiom(MENUS)
 #ExprOn
 #Icon(000003C003C00C300C3033CC324C324C324C324C33CC0C300C3003C003C00000)
 .I recommend using the IDE found here: https://www.cemetech.net/sc/
 
-...Variables in the format of {x+L1} (0 is equivalent to just {L1})
+...Variables in the format of {x+L4} (0 is equivalent to just {L4})
 0=last column height, 1=column height modifier/current column height
 2=X coord of character, 3=Y coord of char
 4=last key pressed, 5=6/15 mhz toggle
 6=char x modifier, 7=char y modifier
-8=toggles saved scene in rear buffer, 9=Something to do with restoring scene from rear buffer
+8=Unused, 9=also unused
 10=x modifier for mining, 11=y modifier for mining
 12=saves last column height when going left, 13=menu choice
 14=toggle structures (0 is on), 15=goto after menu is called (0=MENU, 1=PAUSE)
-16=two byte game speed, 17= second half of {16+L1}
+16=two byte game speed, 17= second half of {16+L4}
+18=world gen direction (0= r-l, 1= l-r), 19=x value of currently worked upon column
+20= saves last height to the right, 21= toggle using CHAR or not
 ...
 
 
 .using 15mhz mode on 84+ calculators without slowing down the game for 6mhz calculators
-1->{5+L1}
-Full->{5+L1}
+1->{5+L4}
+Full->{5+L4}
 DiagnosticOff
-If {5+L1}=0
-	300->{16+L1}^^r
-Else
-	750->{16+L1}^^r
+If {5+L4}=0
+	300->{16+L4}^^r
+	Else
+	750->{16+L4}^^r
 End
 
 .initilizing variables and pointers
 [A0E0A0E0A0E0A0E0]->Pic1TOWR
 [FFFFABEFFFFFFFFF]->Pic1HOSE
 [0E1F0E0404040000]->Pic1TREE
-0->{4+L1}->{6+L1}->{7+L1}->{8+L1}->{14+L1}->{15+L1}
+0->{4+L4}->{6+L4}->{7+L4}->{14+L4}->{15+L4}->{18+L4}->{21+L4}
 
 .This section is the entire menu system, the pause menu just jumps up here
 Lbl MENU
-Menu("MINEWORLD:","New World","Options","End")->{13+L1}
-If {13+L1}=2
+Menu("MINEWORLD:","New World","Options","End")->{13+L4}
+If {13+L4}=2
 	Lbl OPT
-	Menu("OPTIONS:","Strutures","Speed","Back")->{13+L1}
-	If {13+L1}=3
+	Menu("OPTIONS:","Strutures","Speed","Back")->{13+L4}
+	If {13+L4}=3
 		Goto RTP
 	End
-	If {13+L1}=2
+	If {13+L4}=2
 		.1=4.5fps, 2=~5.15fps, 3=6fps, 4=7.2fps, 5=9fps
-		Menu("SPEED:","1","2","3 (default)","4","5")->{13+L1}
-		1150-(150*{13+L1})->{16+L1}^^r
-		If {5+L1}=0
-			{16+L1}^^r/2.5->{16+L1}^^r
+		Menu("SPEED:","1","2","3 (default)","4","5")->{13+L4}
+		1150-(150*{13+L4})->{16+L4}^^r
+		If {5+L4}=0
+			{16+L4}^^r/2.5->{16+L4}^^r
 		End
 		Goto RTP
 	End
-	If {13+L1}=1
-		Menu("STRUCTURES","On (default)","Off")->{13+L1}
-		If {13+L1}=1
-			0->{14+L1}
+	If {13+L4}=1
+		Menu("STRUCTURES","On (default)","Off")->{13+L4}
+		If {13+L4}=1
+			0->{14+L4}
 		End
-		If {13+L1}=2
-			1->{14+L1}
+		If {13+L4}=2
+			1->{14+L4}
 		End
 		Lbl RTP
-		If {15+L1}=0
+		If {15+L4}=0
 			Goto MENU
 		End
 		Goto PAUSE
 End:End
-If {13+L1}=3
+If {13+L4}=3
 	Goto END
 End
 
 .world generator works from right to left on the screen,
 .finding the height of a world, then drawing pixels down
 Lbl START
-rand^34+30->{L1}
-0->{9+L1}
+rand^34+30->{L4}
 Lbl REGEN
 ClrDraw
 For(U,0,95)
 	
+	.this is the secret sauce needed to make the game generate from left to right
+	If {18+L4}=0
+		U->{19+L4}
+		ElseIf U=0
+		95->{19+L4}
+		Else
+		{19+L4}-1->{19+L4}
+	End
+	
 	.generates a random integer from -2 to 2
-	rand^5-2->{1+L1}
-	{L1}+{1+L1}->{1+L1}
+	rand^5-2->{1+L4}
+	{L4}+{1+L4}->{1+L4}
 	
 	.hack to ensure that massive cliffs do not occur due to an overflow error
 	.this is the only time signed mathematics is used
-	If sign{1+L1}>>63
-		63->{1+L1}
+	If sign{1+L4}>>63
+		63->{1+L4}
 	End
-	If sign{1+L1}<<0
-		0->{1+L1}
+	If sign{1+L4}<<0
+		0->{1+L4}
 	End
 	
 	.this is the sprite generation segment
 	.the structures menu can cause this segment to be skipped
 	.the sprites are not placed quite right, I just don't want to fix it
-	If {14+L1}=0
+	If {14+L4}=0
 		.tower
 		If (rand^90+1)=1
-			Pt-On(U-1,{1+L1}-5,Pic1TOWR)
+			Pt-On({19+L4}-1,{1+L4}-5,Pic1TOWR)
 		End
 		
 		.house
 		If rand^90+1=1
-			Pt-Off(U-4,{1+L1}-4,Pic1HOSE)
+			Pt-Off({19+L4}-4,{1+L4}-4,Pic1HOSE)
 		End
 		
 		.tree
 		If rand^30+1=1
-			Pt-On(U-5,{1+L1}-6,Pic1TREE)
+			Pt-On({19+L4}-5,{1+L4}-6,Pic1TREE)
 		End
 	End
 	
-	{1+L1}->{L1}
+	{1+L4}->{L4}
+	
+	If {19+L4}=0
+		{L4}->{20+L4}
+		ElseIf {19+L4}=95
+		{L4}->{12+L4}
+	End
 	
 	.this fills in the rest of the pixels, it's (very) inefficient, but I'm lazy
-	For(A,{1+L1},64)
-		Pxl-On(U,A)
+	For(A,{1+L4},64)
+		Pxl-On({19+L4},A)
 End:End
 DispGraph
+If {21+L4}=1
+	Goto LOOP
+End
 
 .CHAR sets the characters inital position, as well as resuming the saved copy from the rear buffer when applicable
 Lbl CHAR
-If {8+L1}=0
-	30->{2+L1}
-	10->{3+L1}
-	ElseIf {8+L1}=1
-	RecallPic
-	95->{2+L1}
-	{12+L1}->{L1}
-	0->{9+L1}
-	Else
-	0->{2+L1}
-End
-Pxl-On({2+L1},{3+L1})
+30->{2+L4}
+10->{3+L4}
+Pxl-On({2+L4},{3+L4})
 DispGraph
 
-0->{8+L1}
 .ugly while loop handling frames
 Lbl LOOP
-While {4+L1}!=15
-	Pxl-Off({2+L1},{3+L1})
-	0->{4+L1}->{10+L1}->{11+L1}
-	getKey->{4+L1}
+While {4+L4}!=15
+	Pxl-Off({2+L4},{3+L4})
+	0->{4+L4}->{10+L4}->{11+L4}
+	getKey->{4+L4}
 	.dealing with falling
-	If pxl-Test({2+L1},{3+L1}+1}=0
-		{7+L1}+1->{7+L1}
-		If {3+L1}=63
-			{7+L1}-1->{7+L1}
+	If pxl-Test({2+L4},{3+L4}+1}=0
+		{7+L4}+1->{7+L4}
+		If {3+L4}=63
+			{7+L4}-1->{7+L4}
 	End:End
-	If {4+L1}=2
-		If {2+L1}!=0 or {9+L1}=1
-			{6+L1}-1->{6+L1}
-	End:End
-	If {4+L1}=3
-		{6+L1}+1->{6+L1}
+	If {4+L4}=2
+		{6+L4}-1->{6+L4}
+	End
+	If {4+L4}=3
+		{6+L4}+1->{6+L4}
 	End
 	.weird hack needed to jump when on the bottom of the screen
-	If {3+L1}=63 or pxl-Test({2+L1},{3+L1}+1)=1
-		If {4+L1}=4
-			{7+L1}-5->{7+L1}
+	If {3+L4}=63 or pxl-Test({2+L4},{3+L4}+1)=1
+		If {4+L4}=4
+			{7+L4}-5->{7+L4}
 	End:End
 	.mode
-	If {4+L1}=55
+	If {4+L4}=55
 		.this pause menu just jumps to the main menu system 
 		Lbl PAUSE
-		Menu("PAUSE","Continue","New World","Options","Exit")->{13+L1}
-		If {13+L1}=2
+		Menu("PAUSE","Continue","New World","Options","Exit")->{13+L4}
+		If {13+L4}=2
 			Goto START
 		End
-		If {13+L1}=3
-			1->{15+L1}
+		If {13+L4}=3
+			1->{15+L4}
 			Goto OPT
 		End
-		If {13+L1}=4
+		If {13+L4}=4
 			Goto END
 	End:End
 	.resetting the characters position by hitting enter
-	If {4+L1}=9
+	If {4+L4}=9
 		Goto CHAR
 	End
 	.these are all mining commands
-	If {4+L1}=28
-		{11+L1}-1->{11+L1}
+	If {4+L4}=28
+		{11+L4}-1->{11+L4}
 	End
-	If {4+L1}=19
-		{10+L1}+1->{10+L1}
+	If {4+L4}=19
+		{10+L4}+1->{10+L4}
 	End
-	If {4+L1}=26
-		{11+L1}+1->{11+L1}
+	If {4+L4}=26
+		{11+L4}+1->{11+L4}
 	End
-	If {4+L1}=35
-		{10+L1}-1->{10+L1}
+	If {4+L4}=35
+		{10+L4}-1->{10+L4}
 	End
-	If {4+L1}=20
-		{10+L1}+1->{10+L1}
-		{11+L1}-1->{11+L1}
+	If {4+L4}=20
+		{10+L4}+1->{10+L4}
+		{11+L4}-1->{11+L4}
 	End
-	If {4+L1}=18
-		{10+L1}+1->{10+L1}
-		{11+L1}+1->{11+L1}
+	If {4+L4}=18
+		{10+L4}+1->{10+L4}
+		{11+L4}+1->{11+L4}
 	End
-	If {4+L1}=34
-		{10+L1}-1->{10+L1}
-		{11+L1}+1->{11+L1}
+	If {4+L4}=34
+		{10+L4}-1->{10+L4}
+		{11+L4}+1->{11+L4}
 	End
-	If {4+L1}=36
-		{10+L1}-1->{10+L1}
-		{11+L1}-1->{11+L1}
+	If {4+L4}=36
+		{10+L4}-1->{10+L4}
+		{11+L4}-1->{11+L4}
 	End
 	
 	.these two if statements are colision detection and drawing to the screen
-	If pxl-Test({2+L1}+{6+L1},{3+L1}+{7+L1})=0
-		{2+L1}+{6+L1}->{2+L1}
-		{3+L1}+{7+L1}->{3+L1}
-		Pxl-On({2+L1},{3+L1})
+	If pxl-Test({2+L4}+{6+L4},{3+L4}+{7+L4})=0
+		{2+L4}+{6+L4}->{2+L4}
+		{3+L4}+{7+L4}->{3+L4}
+		Pxl-On({2+L4},{3+L4})
 		DispGraph
 	End
-	If {10+L1}!=0 or {11+L1}!=0
-		{2+L1}+{10+L1}->{10+L1}
-		{3+L1}+{11+L1}->{11+L1}
-		Pxl-Change({10+L1},{11+L1}
+	If {10+L4}!=0 or {11+L4}!=0
+		{2+L4}+{10+L4}->{10+L4}
+		{3+L4}+{11+L4}->{11+L4}
+		Pxl-Change({10+L4},{11+L4}
 		DispGraph
 	End
-	0->{6+L1}->{7+L1}
-	.these two if statements are for handling moving off screen
-	If {2+L1}=255
-		1->{8+L1}
-		Goto CHAR
-	End
-	If {2+L1}=96
-		2->{8+L1}
-		StorePic
-		1->{9+L1}
-		{L1}->{12+L1}
+	0->{6+L4}->{7+L4}
+	.these three if statements are for handling moving off screen
+	If {2+L4}=255
+		1->{18+L4}
+		{20+L4}->{L4}
+		1->{21+L4}
+		95->{2+L4}
 		Goto REGEN
 	End
-	If {3+L1}=250
+	If {2+L4}=96
+		0->{18+L4}
+		{12+L4}->{L4}
+		1->{21+L4}
+		0->{2+L4}
+		Goto REGEN
+	End
+	If {3+L4}=250
+		StorePic
+		0->{70+L4}
 		prgmSNAKE
+		If {70+L4}=0
+			RecallPic
+			Else
+			Goto START
+		End
 		Goto LOOP
 	End
 	
 	.pauses for frame pacing, 1800 is 1 second in normal mode, and 4500 is 1 second in full mode
-	Pause {16+L1}^^r
+	Pause {16+L4}^^r
 End
 
 Lbl END

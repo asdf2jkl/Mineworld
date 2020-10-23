@@ -14,11 +14,9 @@ Things being worked upon (in no particular order):
 
 #2 AXE is getting world wrap options
 
-#3 AXE needs to be able to scroll left
+#3 AXE needs a save/load feature
 
-#4 AXE needs a save/load feature
-
-#5 Possible port to html/js or c/c++
+#4 Possible port to html/js or c/c++
 
 Credit to:
 

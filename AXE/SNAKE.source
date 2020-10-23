@@ -1,41 +1,50 @@
-..SNAKE v0.8
+..SNAKE v0.9
 .This program just plays a simple snake game, nothing really to it.
-StorePic
+Lbl SNEK
 ClrDraw
-0->{64+L1}
-0->{65+L1}
-~1->{69+L1}
-63->{67+L1}
-Pxl-On({2+L1},{67+L1})
-While {64+L1}=0
-	0->{68+L1}
-	getKey->{68+L1}
-	If {68+L1}=1
-		0->{65+L1}
-		1->{69+L1}
-	End
-	If {68+L1}=2
-		~1->{65+L1}
-		0->{69+L1}
-	End
-	If {68+L1}=3
-		1->{65+L1}
-		0->{69+L1}
-	End
-	If {68+L1}=4
-		0->{65+L1}
-		~1->{69+L1}
-	End
-	{2+L1}+sign{65+L1}->{2+L1}
-	{67+L1}+sign{69+L1}->{67+L1}
-	pxl-Test({2+L1},{67+L1})->{64+L1}
-	Pxl-On({2+L1},{67+L1})
-	DispGraph
-	If {67+L1}=64
+If {70+L4}=0
+	0->{64+L4}->{65+L4}
+	~1->{69+L4}
+	63->{67+L4}
+End
+Pxl-On({2+L4},{67+L4})
+While {64+L4}=0
+	0->{68+L4}
+	getKey->{68+L4}
+	If {68+L4}=1
+		0->{65+L4}
+		1->{69+L4}
+		ElseIf {68+L4}=2
+		~1->{65+L4}
+		0->{69+L4}
+		ElseIf {68+L4}=3
+		1->{65+L4}
+		0->{69+L4}
+		ElseIf {68+L4}=4
+		0->{65+L4}
+		~1->{69+L4}
+		ElseIf {68+L4}=15
 		Goto ED
 	End
-	Pause {16+L1}^^r
+	{2+L4}+{65+L4}->{2+L4}
+	{67+L4}+{69+L4}->{67+L4}
+	pxl-Test({2+L4},{67+L4})->{64+L4}
+	Pxl-On({2+L4},{67+L4})
+	DispGraph
+	If {67+L4}=64
+		Goto ED
+		ElseIf {67+L4}=255
+		Goto ED
+		ElseIf {2+L4}=96
+		0->{2+L4}
+		1->{70+L4}
+		Goto SNEK
+		ElseIf {2+L4}=255
+		95->{2+L4}
+		1->{70+L4}
+		Goto SNEK
+	End                                             
+	Pause {16+L4}^^r
 End
 Lbl ED
-RecallPic
-0->{3+L1}
+0->{3+L4}
